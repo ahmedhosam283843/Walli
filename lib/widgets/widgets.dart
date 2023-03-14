@@ -5,16 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/wallpaper_model.dart';
 
 Widget brandName() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Text("Walli",
-          style: GoogleFonts.pacifico(
-            fontSize: 32,
-            color: Colors.blue,
-            // fontWeight: FontWeight.bold,
-          ))
-    ],
+  return RichText(
+    textAlign: TextAlign.center,
+    text: TextSpan(
+      style: GoogleFonts.pacifico(
+        fontSize: 32,
+        color: Colors.blue,
+        // fontWeight: FontWeight.bold,
+      ),
+      children: const <TextSpan>[
+        TextSpan(text: 'Walli'),
+      ],
+    ),
   );
 }
 

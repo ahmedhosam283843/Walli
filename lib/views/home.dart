@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:walli/models/categories_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:walli/models/wallpaper_model.dart';
+import 'package:walli/views/search.dart';
 import '../data/data.dart';
 import '../widgets/widgets.dart';
 
@@ -16,11 +17,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController searchController = new TextEditingController();
   List<CategorieModel> categories = [];
   List<PhotosModel> wallpapers = [];
 
   getTrendingWallpapers() async {
-    Uri url = Uri.parse("https://api.pexels.com/v1/curated?per_page=15&page=1");
+    Uri url = Uri.parse("https://api.pexels.com/v1/curated?per_page=20&page=1");
     var response = await http.get(url, headers: {"Authorization": API_KEY});
     Map<String, dynamic> jsonData = jsonDecode(response.body);
     jsonData["photos"].forEach((element) {
@@ -48,6 +50,7 @@ class _HomeState extends State<Home> {
         title: brandName(),
         backgroundColor: Colors.white,
         elevation: 0.0,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -63,12 +66,22 @@ class _HomeState extends State<Home> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: searchController,
                       decoration: InputDecoration(
                           hintText: "search wallpapers",
                           border: InputBorder.none),
                     ),
                   ),
-                  Icon(Icons.search)
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Search(
+                                      searchQuery: searchController.text,
+                                    )));
+                      },
+                      child: Container(child: Icon(Icons.search)))
                 ],
               ),
             ),
