@@ -48,6 +48,7 @@ class _CategorieScreenState extends State<CategorieScreen> {
       appBar: AppBar(
         //show back button
         leading: IconButton(
+          color: Colors.blue,
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);

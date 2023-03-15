@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../models/wallpaper_model.dart';
+import '../views/image_view.dart';
 
 Widget brandName() {
   return RichText(
@@ -32,13 +33,26 @@ Widget wallPaper(List<PhotosModel> listPhotos, BuildContext context) {
         crossAxisSpacing: 6.0,
         children: listPhotos.map((wallpaper) {
           return GridTile(
+              child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ImageView(
+                            imgUrl: wallpaper.src.portrait,
+                          )));
+            },
+            child: Hero(
+              tag: wallpaper.src.portrait,
               child: Container(
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  wallpaper.src.portrait,
-                  fit: BoxFit.cover,
-                )),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.network(
+                      wallpaper.src.portrait,
+                      fit: BoxFit.cover,
+                    )),
+              ),
+            ),
           ));
         }).toList()),
   );

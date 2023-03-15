@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:walli/models/categories_model.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +11,7 @@ import 'package:walli/views/categorie_screen.dart';
 import 'package:walli/views/search.dart';
 import '../data/data.dart';
 import '../widgets/widgets.dart';
+import 'image_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -98,8 +101,8 @@ class _HomeState extends State<Home> {
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
                   return CategorieWidget(
-                    title: categories[index].categorieName,
-                    imgURL: categories[index].imgUrl,
+                    categorie: categories[index].categorieName,
+                    imgUrls: categories[index].imgUrl,
                   );
                 },
               ),
@@ -116,8 +119,10 @@ class _HomeState extends State<Home> {
 }
 
 class CategorieWidget extends StatelessWidget {
-  final String imgURL, title;
-  CategorieWidget({required this.title, required this.imgURL});
+  final String imgUrls, categorie;
+
+  CategorieWidget({required this.imgUrls, required this.categorie});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -126,39 +131,84 @@ class CategorieWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => CategorieScreen(
-                      categorie: title.toLowerCase(),
+                      categorie: categorie,
                     )));
       },
       child: Container(
-        margin: EdgeInsets.only(right: 4),
-        child: Stack(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                imgURL,
-                height: 50,
-                width: 100,
-                fit: BoxFit.cover,
+        margin: EdgeInsets.only(right: 8),
+        child: kIsWeb
+            ? Column(
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: kIsWeb
+                          ? Image.network(
+                              imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Container(
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: Text(
+                        categorie,
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Overpass'),
+                      )),
+                ],
+              )
+            : Stack(
+                children: <Widget>[
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: kIsWeb
+                          ? Image.network(
+                              imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: imgUrls,
+                              height: 50,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            )),
+                  Container(
+                    height: 50,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  Container(
+                      height: 50,
+                      width: 100,
+                      alignment: Alignment.center,
+                      child: Text(
+                        categorie ?? "Yo Yo",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Overpass'),
+                      ))
+                ],
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.black26,
-                  borderRadius: BorderRadius.circular(8)),
-              height: 50,
-              width: 100,
-              alignment: Alignment.center,
-              child: Text(
-                title,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }
