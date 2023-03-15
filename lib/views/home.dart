@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:walli/models/categories_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:walli/models/wallpaper_model.dart';
+import 'package:walli/views/categorie_screen.dart';
 import 'package:walli/views/search.dart';
 import '../data/data.dart';
 import '../widgets/widgets.dart';
@@ -119,34 +120,45 @@ class CategorieWidget extends StatelessWidget {
   CategorieWidget({required this.title, required this.imgURL});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 4),
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              imgURL,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CategorieScreen(
+                      categorie: title.toLowerCase(),
+                    )));
+      },
+      child: Container(
+        margin: EdgeInsets.only(right: 4),
+        child: Stack(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                imgURL,
+                height: 50,
+                width: 100,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.black26,
+                  borderRadius: BorderRadius.circular(8)),
               height: 50,
               width: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.black26, borderRadius: BorderRadius.circular(8)),
-            height: 50,
-            width: 100,
-            alignment: Alignment.center,
-            child: Text(
-              title,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16),
-            ),
-          )
-        ],
+              alignment: Alignment.center,
+              child: Text(
+                title,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
