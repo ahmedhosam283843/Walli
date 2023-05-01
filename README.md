@@ -8,7 +8,7 @@ Walli is a multi-platform wallpaper app built with Flutter and the Pixels API. I
 - Download wallpapers to use on your device.
 - Filter wallpapers by category or search term
 - Preview wallpapers before downloading them
-- Save wallpapers to your device or share them with your friends
+- Save wallpapers to your local device
 
 ## Previews 📷
 
